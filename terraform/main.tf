@@ -1,14 +1,9 @@
-# Create Jenkins Server
-resource "aws_instance" "jenkins" {
-  ami           = "ami-04823729c75214919"
-  instance_type = "t2.micro"
-  key_name      = "Braeden-Laptop"
-
-  vpc_security_group_ids = [aws_security_group.devops_sg.id]
-  tags = {
-    Name = "Jenkins Server"
-  }
-  user_data = <<-EOF
+# Create Jenkins server
+module "jenkins_server" {
+  source          = "./modules/server"
+  security_groups = [aws_security_group.devops_sg.id]
+  server_name     = "Jenkins Server"
+  user_data       = <<-EOF
   #!/bin/bash
   set -e
   sudo yum update -y
@@ -22,10 +17,12 @@ resource "aws_instance" "jenkins" {
 EOF
 }
 
-output "publicip" {
-  value = aws_instance.jenkins.public_ip
+# Print public ip address
+output "jenkins_ip" {
+  value = module.jenkins_server.publicip
 }
 
+# Create security group to use
 resource "aws_security_group" "devops_sg" {
   name        = "devops-sg"
   description = "Security group for basic devops"
@@ -47,10 +44,11 @@ resource "aws_security_group" "devops_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  # Allow all outbound traffic
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = -1
-    cidr_blocks =["0.0.0.0/0"]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 }
