@@ -9,4 +9,10 @@ variable "security_groups" {
 
 variable "user_data" {
   description = "Commands to run on server startup"
+  default     = null
+}
+
+variable "iam_role" {
+  description = "IAM roles to assign to instance"
+  default     = null
 }

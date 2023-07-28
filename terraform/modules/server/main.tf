@@ -1,8 +1,9 @@
 # EC2 Server template
 resource "aws_instance" "server" {
-  ami           = "ami-04823729c75214919"
-  instance_type = "t2.micro"
-  key_name      = "Braeden-Laptop"
+  ami                  = "ami-04823729c75214919"
+  instance_type        = "t2.micro"
+  key_name             = "Braeden-Laptop"
+  iam_instance_profile = var.iam_role
 
   vpc_security_group_ids = var.security_groups
   tags = {
@@ -16,6 +17,6 @@ output "publicip" {
   value = aws_instance.server.public_ip
 }
 
-output "privateip"{
+output "privateip" {
   value = aws_instance.server.private_ip
 }
