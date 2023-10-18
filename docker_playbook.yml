@@ -1,0 +1,14 @@
+---
+- hosts: ansible_host
+
+  tasks:
+  - name: Create Docker image
+    command: docker build -t mytomcat .
+    args:
+      chdir: /opt/docker
+
+  - name: Create Tag to push image onto dockerhub
+    command: docker tag mytomcat btslade97/mytomcat
+
+  - name: push docker image
+    command: docker push btslade97/mytomcat

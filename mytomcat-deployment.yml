@@ -1,0 +1,33 @@
+# Deployment name and Deployment label
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: btslade97-mytomcat
+  labels:
+    app: mytomcat
+
+# Create two pods from the pod template below
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mytomcat
+
+# Template to create a pod
+  template:
+    metadata:
+      labels:
+        app: mytomcat
+    spec:
+      containers:
+      - name: mytomcat
+        image: btslade97/mytomcat
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+    # Make sure only one pod updated at a time
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1

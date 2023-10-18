@@ -1,0 +1,13 @@
+---
+- hosts: kubernetes
+  user : root
+
+  tasks:
+  - name: Deploy mytomcat on kubernetes
+    command: kubectl apply -f mytomcat-deployment.yml
+
+  - name: Create service for mytomcat
+    command: kubectl apply -f mytomcat-service.yml
+
+  - name: update deployment with new pods if image updated on docker hub
+    command: kubectl rollout restart deployment.apps/btslade97-mytomcat

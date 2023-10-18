@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+
+# Service name and label
+metadata:
+  name: btslade97-service
+  labels:
+    app: mytomcat
+# To which deployment to send traffic
+spec:
+  selector:
+    app: mytomcat
+  # Port number exposed at cluster level, port container listening on
+  ports:
+    - port: 8080
+      targetPort: 8080
+
+  type: LoadBalancer
